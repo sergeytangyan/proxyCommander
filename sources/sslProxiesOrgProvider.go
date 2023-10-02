@@ -1,4 +1,4 @@
-package providers
+package sources
 
 import (
 	"fmt"
@@ -8,11 +8,11 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-type SslProxiesOrgProvider struct {
+type SslProxiesOrgSource struct {
 	lastProxy string
 }
 
-func (p *SslProxiesOrgProvider) GetNextBatch() ([]string, error) {
+func (p *SslProxiesOrgSource) GetProxyList() ([]string, error) {
 	log.Println("Getting proxies")
 
 	res, err := http.Get("https://sslproxies.org/")

@@ -4,14 +4,14 @@ import (
 	"log"
 	"time"
 
-	"sergeytangyan/proxyCommander/providers"
+	"sergeytangyan/proxyCommander/sources"
 )
 
 func main() {
+	proxiesSource := &sources.SslProxiesOrgSource{}
 	myIpProxyRequest := newMyIpProxyRequest()
 
-	provider := &providers.SslProxiesOrgProvider{}
-	pm := newProxyManager(provider, myIpProxyRequest.timeout)
+	pm := newProxyManager(proxiesSource, myIpProxyRequest.timeout)
 
 	for {
 		err := pm.Do(myIpProxyRequest)

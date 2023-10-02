@@ -7,8 +7,8 @@ import (
 	"time"
 )
 
-type ProxyProvider interface {
-	GetNextBatch() ([]string, error)
+type ProxySource interface {
+	GetProxyList() ([]string, error)
 }
 
 type ProxyRequest interface {
@@ -16,14 +16,14 @@ type ProxyRequest interface {
 }
 
 type ProxyManager struct {
-	proxyList []string
-	provider  ProxyProvider
-	client    *http.Client
+	proxyList   []string
+	proxySource ProxySource
+	client      *http.Client
 }
 
-func newProxyManager(provider ProxyProvider, timeout time.Duration) *ProxyManager {
+func newProxyManager(proxySource ProxySource, timeout time.Duration) *ProxyManager {
 	pm := &ProxyManager{
-		provider: provider,
+		proxySource: proxySource,
 		client: &http.Client{
 			Timeout: timeout,
 		},
@@ -36,7 +36,7 @@ func (pm *ProxyManager) getNextProxy() (string, error) {
 	length := len(pm.proxyList)
 
 	if length == 0 {
-		res, err := pm.provider.GetNextBatch()
+		res, err := pm.proxySource.GetProxyList()
 		if err != nil {
 			return "", err
 		}
